@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Timetable by RIG Consultancy · Clash-free college timetables</title>
+<meta name="description" content="Send us your college's timetable Excel and we return a clash-free timetable in your own format: every division, batch, faculty member and room, ready to print. Free for one semester for pilot colleges.">
+<style>
+  :root {
+    --bg: #ffffff; --fg: #18181b; --muted: #52525b; --line: #e4e4e7;
+    --panel: #f4f4f5; --accent: #1d4ed8; --accent-fg: #ffffff; --ok: #15803d; --bad: #b91c1c;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #09090b; --fg: #f4f4f5; --muted: #a1a1aa; --line: #27272a;
+      --panel: #18181b; --accent: #60a5fa; --accent-fg: #09090b; --ok: #4ade80; --bad: #f87171;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--fg);
+    font: 16px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  a { color: var(--accent); }
+  a:focus-visible, .btn:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+  .wrap { max-width: 1040px; margin: 0 auto; padding: 0 16px; }
+  header { border-bottom: 1px solid var(--line); }
+  header .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 60px; }
+  .brand { font-weight: 700; font-size: 18px; color: var(--fg); text-decoration: none; }
+  nav a { margin-left: 18px; color: var(--muted); text-decoration: none; font-size: 15px; }
+  nav a:hover { color: var(--fg); }
+  @media (max-width: 640px) { nav a:not(.btn) { display: none; } }
+  .btn { display: inline-block; background: var(--accent); color: var(--accent-fg); text-decoration: none;
+    padding: 10px 18px; border-radius: 8px; font-weight: 600; }
+  nav .btn { color: var(--accent-fg); padding: 7px 14px; margin-left: 0; }
+  .btn.ghost { background: transparent; color: var(--fg); border: 1px solid var(--line); }
+  section { padding: 64px 0; border-bottom: 1px solid var(--line); }
+  h1 { font-size: clamp(32px, 6vw, 52px); line-height: 1.1; margin: 0 0 18px; letter-spacing: -0.02em; }
+  h2 { font-size: clamp(24px, 4vw, 32px); margin: 0 0 12px; letter-spacing: -0.01em; }
+  h3 { font-size: 18px; margin: 0 0 6px; }
+  .lead { font-size: 19px; color: var(--muted); max-width: 640px; margin: 0 0 28px; }
+  .sub { color: var(--muted); max-width: 680px; margin: 0 0 32px; }
+  .hero { display: grid; grid-template-columns: 1.1fr 1fr; gap: 40px; align-items: center; }
+  @media (max-width: 860px) { .hero { grid-template-columns: 1fr; } }
+  .hero > * { min-width: 0; }
+  @media (max-width: 400px) { .tt { border-spacing: 2px; } .tt td { padding: 4px; } .tt th { padding: 2px 0; } }
+  .actions { display: flex; gap: 12px; flex-wrap: wrap; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 20px; }
+  .card p { margin: 0; color: var(--muted); font-size: 15px; }
+  /* Mock weekly grid: sample data only */
+  .tt { width: 100%; border-collapse: separate; border-spacing: 4px; font-size: 13px; table-layout: fixed; }
+  .tt caption { text-align: left; font-weight: 600; margin-bottom: 6px; font-size: 14px; }
+  .tt th { color: var(--muted); font-weight: 600; text-align: left; padding: 2px 4px; }
+  .tt thead th:first-child { width: 52px; }
+  .tt td { background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 6px; height: 50px; vertical-align: top; }
+  .tt td b { display: block; font-size: 12px; }
+  .tt td span { color: var(--muted); font-size: 11px; }
+  .tt td.lunch { background: transparent; border-style: dashed; color: var(--muted); text-align: center; vertical-align: middle; }
+  .steps { counter-reset: s; list-style: none; padding: 0; margin: 0; display: grid; gap: 16px;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
+  .steps li { counter-increment: s; background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 20px; }
+  .steps li::before { content: counter(s); display: inline-grid; place-items: center; width: 28px; height: 28px;
+    border-radius: 50%; background: var(--accent); color: var(--accent-fg); font-weight: 700; margin-bottom: 10px; }
+  .steps p { margin: 0; color: var(--muted); font-size: 15px; }
+  .compare { width: 100%; border-collapse: collapse; max-width: 720px; }
+  .compare th, .compare td { text-align: left; padding: 10px 8px; border-bottom: 1px solid var(--line); }
+  .compare td:nth-child(n+2), .compare th:nth-child(n+2) { text-align: right; }
+  @media (max-width: 400px) { .compare th, .compare td { padding: 8px 4px; font-size: 14px; } }
+  .good { color: var(--ok); font-weight: 700; }
+  .badn { color: var(--bad); font-weight: 700; }
+  .note { color: var(--muted); font-size: 14px; margin-top: 12px; }
+  .pilot { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 760px) { .pilot { grid-template-columns: 1fr; } }
+  .pilot ul { margin: 8px 0 0; padding-left: 20px; color: var(--muted); }
+  details { border-bottom: 1px solid var(--line); padding: 14px 0; max-width: 760px; }
+  summary { cursor: pointer; font-weight: 600; }
+  details p { color: var(--muted); margin: 8px 0 0; }
+  .samples { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+  figure { margin: 0; background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 12px; }
+  figure img { display: block; width: 100%; height: auto; border-radius: 6px; border: 1px solid var(--line); background: #fff; }
+  figcaption { margin-top: 10px; font-size: 15px; color: var(--muted); }
+  figcaption b { color: var(--fg); }
+  .btn.wa { background: #15803d; color: #ffffff; }
+  .terms { margin: 24px 0 0; padding-left: 20px; max-width: 760px; }
+  .terms li { margin-bottom: 6px; }
+  footer { padding: 32px 0; color: var(--muted); font-size: 14px; }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <a class="brand" href="#top">Timetable <span style="font-weight:400;color:var(--muted)">by RIG Consultancy</span></a>
+    <nav aria-label="Main">
+      <a href="#how">Our service</a>
+      <a href="#samples">Samples</a>
+      <a href="#results">Results</a>
+      <a href="#about">About us</a>
+      <a href="#faq">FAQ</a>
+      <a class="btn" href="#pilot">Join the pilot</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <section>
+    <div class="wrap hero">
+      <div>
+        <h1>A clash-free timetable for your whole college, in minutes.</h1>
+        <p class="lead">Send us the Excel sheets you already use. We return a timetable with no room, faculty or student
+          clashes, in your college's own format, with a printed copy for every division, batch, faculty member and room.
+          When something changes during the semester, we re-plan it for you.</p>
+        <div class="actions">
+          <a class="btn" href="#pilot">Join the free pilot</a>
+          <a class="btn ghost" href="#samples">See sample timetables</a>
+        </div>
+      </div>
+      <table class="tt" aria-describedby="tt-note">
+        <caption>SY-A · sample week</caption>
+        <thead><tr><th scope="col"></th><th scope="col">Mon</th><th scope="col">Tue</th><th scope="col">Wed</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">09:00</th>
+            <td><b>Data Structures</b><span>Prof. Rao · 204</span></td>
+            <td><b>Maths III</b><span>Dr. Iyer · 101</span></td>
+            <td><b>DBMS Lab</b><span>A1 · Lab 2</span></td></tr>
+          <tr><th scope="row">10:00</th>
+            <td><b>DBMS</b><span>Prof. Shah · 204</span></td>
+            <td><b>Data Structures</b><span>Prof. Rao · 204</span></td>
+            <td><b>DBMS Lab</b><span>A1 · Lab 2</span></td></tr>
+          <tr><th scope="row">11:00</th>
+            <td class="lunch">Lunch</td>
+            <td><b>Economics</b><span>Dr. Menon · 110</span></td>
+            <td class="lunch">Lunch</td></tr>
+          <tr><th scope="row">12:00</th>
+            <td><b>Maths III</b><span>Dr. Iyer · 101</span></td>
+            <td class="lunch">Lunch</td>
+            <td><b>DBMS</b><span>Prof. Shah · 204</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p id="tt-note" class="wrap note">Sample data. Every division, batch, faculty member and room gets a view like this.</p>
+  </section>
+
+  <section id="how">
+    <div class="wrap">
+      <h2>We make the timetable for you</h2>
+      <p class="sub">No software to install and no accounts to create. Your coordinator sends us the data, we do the scheduling
+        and send back finished timetables.</p>
+      <ol class="steps">
+        <li><h3>Send your data</h3><p>Last semester's timetable workbook as it is, plus this semester's subjects, faculty
+          availability and rooms. Or fill in our Excel template.</p></li>
+        <li><h3>We generate and check it</h3><p>Our scheduler builds a clash-free timetable, then reduces gaps and respects
+          lunch breaks, labs, batches and faculty preferences. Every rule is checked again before we send it.</p></li>
+        <li><h3>You review and approve</h3><p>Tell us what to change (a class to move, a teacher who can't come on Fridays)
+          and we adjust only that, without new clashes.</p></li>
+        <li><h3>You get every view</h3><p>PDF and Excel for each division, batch, faculty member and room, ready to print
+          and sign, plus a calendar file faculty can add to their phone.</p></li>
+        <li><h3>Changes during the semester</h3><p>A faculty member on leave, a room closed, a new batch? Message us. Only the
+          affected classes move, and we suggest make-up slots and free substitutes.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section id="samples">
+    <div class="wrap">
+      <h2>What you receive</h2>
+      <p class="sub">Real output from our system, for a made-up college. Each print has your institution's name, the date it
+        takes effect, a version number, a key of subjects and teachers, and signature lines.</p>
+      <div class="samples">
+        <figure>
+          <a href="samples/class.png"><img src="samples/class.png" width="1287" height="910" loading="lazy"
+            alt="Sample weekly timetable for division CS1-A: classes as coloured blocks per day and period, labs for three batches side by side, and a key of subjects and teachers below."></a>
+          <figcaption><b>Division / batch</b>: labs span their periods, parallel batches side by side.</figcaption>
+        </figure>
+        <figure>
+          <a href="samples/faculty.png"><img src="samples/faculty.png" width="1287" height="910" loading="lazy"
+            alt="Sample weekly timetable for one faculty member, showing each class with its division and room."></a>
+          <figcaption><b>Faculty</b>: each teacher's own week, with divisions and rooms.</figcaption>
+        </figure>
+        <figure>
+          <a href="samples/room.png"><img src="samples/room.png" width="1287" height="910" loading="lazy"
+            alt="Sample weekly timetable for lecture hall LH01, showing which division uses the room in each period."></a>
+          <figcaption><b>Room</b>: for the door or the office, showing who is in each room and when.</figcaption>
+        </figure>
+      </div>
+      <p class="actions" style="margin-top:24px">
+        <a class="btn ghost" href="samples/sample-timetable.pdf">Download the sample PDF (6 pages)</a>
+        <a class="btn ghost" href="samples/sample-timetable.xlsx">Download the sample Excel</a>
+      </p>
+    </div>
+  </section>
+
+  <section id="features">
+    <div class="wrap">
+      <h2>What we can handle for you</h2>
+      <p class="sub">Designed around Indian college rules: divisions and batches, labs, Saturdays, shifts and NAAC / NBA reports.</p>
+      <div class="grid">
+        <div class="card"><h3>No clashes, guaranteed</h3><p>No room, faculty or student group is ever double-booked. Batches, multi-hour labs, lunch breaks, faculty limits and unavailability are all respected.</p></div>
+        <div class="card"><h3>Your own Excel format</h3><p>We read your college's existing timetable workbooks and return the new timetable in the same layout you use today.</p></div>
+        <div class="card"><h3>Small changes stay small</h3><p>A faculty member becomes unavailable? We re-plan and only the affected classes move. Classes you want fixed stay where they are.</p></div>
+        <div class="card"><h3>Make-ups and substitutes</h3><p>For cancelled lectures we find make-up slots and free substitutes that create no new clashes.</p></div>
+        <div class="card"><h3>Hours and NAAC / NBA</h3><p>Planned vs delivered hours per subject, faculty and division, warnings before a subject falls short, and a workbook ready for accreditation.</p></div>
+        <div class="card"><h3>Exams and invigilation</h3><p>An exam timetable where no student has two exams at once, with rooms seated and invigilators assigned fairly.</p></div>
+        <div class="card"><h3>Electives without collisions</h3><p>Give us who takes which elective and students' electives will clash as little as possible.</p></div>
+        <div class="card"><h3>Room bookings</h3><p>Seminars and events booked into rooms without disturbing any class, and free rooms found for a given time.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="results">
+    <div class="wrap">
+      <h2>Tested on a real university's data</h2>
+      <p class="sub">611 sections and 984 weekly sessions across 41 divisions, 120 faculty and 35 rooms, compared with the timetable made by hand.</p>
+      <table class="compare">
+        <thead><tr><th scope="col"></th><th scope="col">Made by hand</th><th scope="col">Generated</th></tr></thead>
+        <tbody>
+          <tr><td>Clashing slots (room / faculty / students)</td><td class="badn">15</td><td class="good">0</td></tr>
+          <tr><td>Division-days with no lunch break</td><td class="badn">4</td><td class="good">0</td></tr>
+          <tr><td>Student idle periods (lunch excluded)</td><td>113</td><td class="good">5</td></tr>
+        </tbody>
+      </table>
+      <p class="note">The whole timetable was generated in about 2 minutes. Re-planning after one faculty member became unavailable moved 1 of the 984 sessions.</p>
+    </div>
+  </section>
+
+  <section id="pilot">
+    <div class="wrap">
+      <h2>Free for one semester for pilot colleges</h2>
+      <p class="sub">We are taking on a small number of founding colleges for the coming semester, free of charge.
+        You can start with one department and add the rest once you are happy.</p>
+      <div class="pilot">
+        <div class="card"><h3>You get</h3>
+          <ul>
+            <li>Your semester timetable, made clash-free from your own data</li>
+            <li>Printed PDF and Excel for every division, batch, faculty member and room</li>
+            <li>Changes during the semester handled by us, quickly</li>
+            <li>Direct contact with the people who build the system</li>
+          </ul>
+        </div>
+        <div class="card"><h3>We ask for</h3>
+          <ul>
+            <li>One coordinator who sends us the data and changes</li>
+            <li>A short weekly call: what worked, what didn't</li>
+            <li>A written testimonial at the end, if it saved you time</li>
+          </ul>
+        </div>
+      </div>
+      <ul class="terms">
+        <li><b>Keep your current process as a backup</b> in the first semester. Nothing is lost if you decide to stop.</li>
+        <li><b>We need very little data:</b> names of faculty, rooms, divisions and subjects. No student personal data.</li>
+        <li><b>A one-page pilot letter</b> sets out what we hold and that we delete it when you ask.</li>
+      </ul>
+      <p class="actions" style="margin-top:28px">
+        <a class="btn" href="mailto:info.rigconsultancy@gmail.com?subject=Timetable%20pilot">Email us to join the pilot</a>
+        <a class="btn wa" href="https://wa.me/918766685471?text=Hello%2C%20we%20would%20like%20to%20know%20more%20about%20the%20free%20timetable%20pilot.">Message us on WhatsApp</a>
+      </p>
+      <p class="note">Please tell us your college, roughly how many divisions you have, and when your next semester starts.
+        Timetables for a January term are best started in December.</p>
+    </div>
+  </section>
+
+  <section id="about">
+    <div class="wrap">
+      <h2>Who we are</h2>
+      <p class="sub">This service is run by <b>RIG Consultancy</b>. We build the scheduling system ourselves and make the
+        timetables for pilot colleges personally, so you always talk to someone who knows exactly how it works.</p>
+      <p>Email <a href="mailto:info.rigconsultancy@gmail.com">info.rigconsultancy@gmail.com</a> ·
+        WhatsApp or call <a href="tel:+918766685471">+91 87666 85471</a></p>
+    </div>
+  </section>
+
+  <section id="faq">
+    <div class="wrap">
+      <h2>Questions</h2>
+      <details><summary>What does it cost after the pilot?</summary>
+        <p>Pilot colleges use it free for the semester. Plans after that are being shaped with pilot colleges' feedback, and a free option for small use is planned.</p></details>
+      <details><summary>What happens to our data?</summary>
+        <p>Your data is used only to make your college's timetable. It is kept on our own computer, not uploaded to any cloud service, kept separate from other colleges' data, and never sold. You get all of it back in Excel at any time, and we delete it when you ask. We follow India's Digital Personal Data Protection Act.</p></details>
+      <details><summary>Do we need to install anything or create accounts?</summary>
+        <p>No. You send us Excel files by email or WhatsApp and receive PDFs and Excel files back. Faculty get their own timetable as a PDF and a calendar file for their phone.</p></details>
+      <details><summary>How quickly do we get the timetable?</summary>
+        <p>Usually within a few working days of receiving complete data, including a round of your corrections. Changes during the semester are usually turned around the same or next working day.</p></details>
+      <details><summary>Our timetable has unusual rules. Will it fit?</summary>
+        <p>It already handles divisions and batches, multi-hour labs, combined classes, shifts, Saturday rules, lunch windows, faculty limits and preferences. Tell us your rules when you send the data.</p></details>
+      <details><summary>Can we keep using our Excel format?</summary>
+        <p>Yes. Send your existing timetable workbooks as they are, and you get the new timetable back in the same layout.</p></details>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">Timetable by RIG Consultancy · Clash-free timetables for colleges and universities · <a href="mailto:info.rigconsultancy@gmail.com">info.rigconsultancy@gmail.com</a></div>
+</footer>
+</body>
+</html>
