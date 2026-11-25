@@ -179,6 +179,87 @@
   .js .reveal:not(.in) .count { --n: 0; }
   @keyframes count { from { --n: 0; } to { --n: var(--to); } }
 
+
+  /* What we deliver: animated flow */
+  .flow { list-style: none; padding: 0; margin: 8px 0 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 34px; }
+  @media (max-width: 900px) { .flow { grid-template-columns: 1fr; gap: 40px; max-width: 460px; margin-left: auto; margin-right: auto; } }
+  .flow li { position: relative; background: var(--panel); border: 1px solid var(--line); border-radius: 18px; padding: 24px 20px;
+    text-align: center; box-shadow: var(--shadow); }
+  .flow h3 { font-size: 17px; }
+  .flow p { margin: 0; color: var(--muted); font-size: 15px; }
+  .node { width: 66px; height: 66px; border-radius: 20px; margin: 0 auto 14px; display: grid; place-items: center;
+    background: var(--accent-soft); color: var(--accent); animation: pulse 8s ease-in-out infinite; animation-delay: calc(var(--k) * 2s); }
+  .node svg { width: 30px; height: 30px; }
+  .node.spin svg { animation: spin 7s linear infinite; }
+  @keyframes pulse { 0%, 22%, 100% { transform: none; box-shadow: 0 0 0 0 transparent; }
+    8% { transform: scale(1.12); box-shadow: 0 0 0 10px color-mix(in srgb, var(--accent) 16%, transparent); } }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .flow li:not(:last-child)::after { content: ""; position: absolute; top: 56px; right: -34px; width: 34px; height: 3px; border-radius: 3px;
+    background: linear-gradient(90deg, var(--line) 0 35%, var(--accent) 50%, var(--line) 65% 100%); background-size: 300% 100%;
+    animation: stream 1.6s linear infinite; }
+  @media (max-width: 900px) { .flow li:not(:last-child)::after { top: auto; right: auto; bottom: -40px; left: calc(50% - 1.5px); width: 3px; height: 40px;
+    background: linear-gradient(180deg, var(--line) 0 35%, var(--accent) 50%, var(--line) 65% 100%); background-size: 100% 300%; animation-name: stream-v; } }
+  @keyframes stream { from { background-position: 100% 0; } to { background-position: 0 0; } }
+  @keyframes stream-v { from { background-position: 0 100%; } to { background-position: 0 0; } }
+  .js .deliver:not(.in) *, .js .deliver:not(.in) *::after { animation-play-state: paused !important; }
+  .files { list-style: none; padding: 0; margin: 40px 0 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 14px; }
+  .files li { display: flex; gap: 14px; align-items: center; background: var(--panel); border: 1px solid var(--line); border-radius: 14px;
+    padding: 14px 16px; box-shadow: var(--shadow); transition: transform .25s, box-shadow .25s; }
+  .files li:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+  .files b { display: block; font-size: 15px; }
+  .files li > span > span { color: var(--muted); font-size: 14px; }
+  .files li > span:last-child { min-width: 0; }
+  .doc { flex: none; width: 42px; height: 50px; border-radius: 6px 14px 6px 6px; display: grid; place-items: end center; padding-bottom: 6px;
+    font-size: 10px; font-weight: 800; letter-spacing: .04em; color: #ffffff; position: relative; }
+  .doc.pdf { background: #b91c1c; } .doc.xls { background: #15803d; } .doc.ics { background: #0369a1; } .doc.web { background: #0f766e; }
+  .doc::before { content: ""; position: absolute; top: 9px; left: 9px; right: 9px; height: 3px; border-radius: 2px; background: rgb(255 255 255 / .6);
+    box-shadow: 0 7px 0 rgb(255 255 255 / .6), 0 14px 0 rgb(255 255 255 / .45); }
+
+  /* Your semester, handled: animated phone */
+  .handled { display: grid; grid-template-columns: 1.1fr 1fr; gap: 56px; align-items: center; }
+  @media (max-width: 900px) { .handled { grid-template-columns: 1fr; gap: 40px; } }
+  .handled > * { min-width: 0; }
+  .ticklist { list-style: none; padding: 0; margin: 0; display: grid; gap: 16px; }
+  .ticklist li { display: grid; grid-template-columns: 40px 1fr; gap: 14px; align-items: start; }
+  .ticklist .icon { margin: 0; width: 40px; height: 40px; border-radius: 12px; }
+  .ticklist .icon svg { width: 20px; height: 20px; }
+  .ticklist b { display: block; }
+  .ticklist span { color: var(--muted); font-size: 15px; }
+  .phone-wrap { text-align: center; }
+  .phone { position: relative; width: min(300px, 100%); margin: 0 auto; border-radius: 40px; border: 10px solid #0f172a; background: var(--bg);
+    box-shadow: var(--shadow-lg); padding: 14px 14px 22px; text-align: left; overflow: hidden; animation: float 7s ease-in-out infinite; }
+  .phone::before { content: ""; display: block; width: 90px; height: 6px; border-radius: 6px; background: #0f172a; margin: 0 auto 12px; opacity: .85; }
+  .ph-top { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); font-weight: 600; margin-bottom: 10px; }
+  .ph-title { font-weight: 800; font-size: 16px; margin: 0 0 2px; }
+  .ph-sub { color: var(--muted); font-size: 12px; margin: 0 0 12px; }
+  .ph-list { display: grid; gap: 8px; }
+  .ph-c { display: grid; grid-template-columns: 44px 1fr; gap: 8px; align-items: center; border-radius: 12px; padding: 9px 10px; font-size: 12px;
+    background: var(--panel); border: 1px solid var(--line); color: var(--ink); }
+  .ph-c time { color: var(--muted); font-weight: 700; }
+  .ph-c b { display: block; font-size: 13px; }
+  .ph-c small { color: var(--muted); }
+  .ph-c.k1 { background: var(--c1); border-color: transparent; } .ph-c.k3 { background: var(--c3); border-color: transparent; }
+  .ph-c.k6 { background: var(--c6); border-color: transparent; }
+  .ph-c.free { border-style: dashed; background: transparent; color: var(--muted); }
+  .ph-c:not(.free) time, .ph-c:not(.free) small { color: var(--ink); }
+  .ph-c.cover { background: var(--c4); border: 2px solid var(--accent); animation: cover 10s ease-in-out infinite; }
+  .ph-c.cover .tag { display: inline-block; margin-left: 6px; padding: 1px 7px; border-radius: 999px; font-size: 10px; font-weight: 800;
+    background: var(--accent); color: var(--accent-fg); vertical-align: 1px; }
+  .ph-c.gone { animation: gone 10s ease-in-out infinite; }
+  .toast { position: absolute; left: 10px; right: 10px; top: 36px; z-index: 2; background: var(--panel); border: 1px solid var(--line);
+    border-radius: 14px; box-shadow: var(--shadow-lg); padding: 10px 12px; font-size: 12px; display: grid; grid-template-columns: 30px 1fr; gap: 8px;
+    animation: toast 10s ease-in-out infinite; }
+  .toast .ic { width: 30px; height: 30px; border-radius: 9px; display: grid; place-items: center; background: var(--accent-soft); color: var(--accent); }
+  .toast .ic svg { width: 16px; height: 16px; }
+  .toast b { display: block; font-size: 12px; }
+  @keyframes toast { 0%, 6% { opacity: 0; transform: translateY(-120%); } 12%, 48% { opacity: 1; transform: none; } 56%, 100% { opacity: 0; transform: translateY(-120%); } }
+  @keyframes cover { 0%, 22% { opacity: 0; transform: scale(.9); } 30%, 92% { opacity: 1; transform: none; } 100% { opacity: 0; transform: scale(.96); } }
+  @keyframes gone { 0%, 22% { opacity: 1; } 30%, 92% { opacity: 0; } 100% { opacity: 1; } }
+  .ph-slot { position: relative; display: grid; }
+  .ph-slot > * { grid-area: 1 / 1; }
+  .js .phone:not(.in) *, .js .phone:not(.in) { animation-play-state: paused !important; }
+  .phone-wrap figcaption { margin-top: 16px; }
+
   /* Steps */
   .steps { counter-reset: s; list-style: none; padding: 0; margin: 0; display: grid; gap: 18px;
     grid-template-columns: repeat(5, 1fr); position: relative; }
@@ -308,6 +389,8 @@
     .js .reveal:not(.in) .count { --n: var(--to); }
     .marquee { flex-wrap: wrap; width: auto; justify-content: center; }
     .marquee ul + ul { display: none; }
+    .ph-c.gone { display: none; }
+    .toast { position: static; margin-bottom: 10px; }
     .marquee ul { flex-wrap: wrap; justify-content: center; }
   }
 </style>
@@ -327,6 +410,7 @@
   <div class="wrap">
     <a class="brand" href="#top"><span class="logo" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"><path d="M5 8h14M5 12h14M5 16h9"/></svg></span>Timetable <small>by RIG Consultancy</small></a>
     <nav aria-label="Main">
+      <a href="#deliver">What we deliver</a>
       <a href="#how">Our service</a>
       <a href="#samples">Samples</a>
       <a href="#results">Results</a>
@@ -423,6 +507,35 @@
     </div>
   </div>
 
+  <section id="deliver">
+    <div class="wrap">
+      <div class="reveal center">
+        <span class="eyebrow">What we deliver</span>
+        <h2>From your Excel to every timetable in the college</h2>
+        <p class="sub">You keep working the way you do today. We turn your sheets into a timetable with no clashes, and every person gets
+          the view they need, ready to print or open on a phone.</p>
+      </div>
+      <ol class="flow deliver reveal">
+        <li style="--k:0"><span class="node" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M4 9h16M4 15h16M10 3v18"/></svg></span>
+          <h3>1. Your Excel</h3><p>Last semester's timetable workbook as it is, plus this term's subjects, faculty and rooms.</p></li>
+        <li style="--k:1"><span class="node spin" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></span>
+          <h3>2. Our scheduling engine</h3><p>Weighs every room, teacher, batch, lab and lunch rule at once, then removes idle gaps.</p></li>
+        <li style="--k:2"><span class="node" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 4.5-3.4 8-8 9-4.6-1-8-4.5-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></svg></span>
+          <h3>3. Checked, clash-free</h3><p>Every rule is checked again on the finished timetable. You review it and we adjust what you ask.</p></li>
+        <li style="--k:3"><span class="node" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.5-3.5 3.2-5.5 6.5-5.5s6 2 6.5 5.5"/><circle cx="17.5" cy="9" r="2.5"/><path d="M17 14.5c2.6.2 4.2 1.9 4.5 4.5"/></svg></span>
+          <h3>4. Everyone gets theirs</h3><p>Each division, batch, teacher and room: printed, in Excel, and on their phone.</p></li>
+      </ol>
+      <ul class="files stagger" aria-label="What you receive">
+        <li><span class="doc pdf" aria-hidden="true">PDF</span><span><b>Division &amp; batch timetables</b><span>signed-off layout, labs as one block</span></span></li>
+        <li><span class="doc pdf" aria-hidden="true">PDF</span><span><b>Faculty timetables</b><span>each teacher's week with rooms</span></span></li>
+        <li><span class="doc pdf" aria-hidden="true">PDF</span><span><b>Room door sheets</b><span>who uses each room, and when</span></span></li>
+        <li><span class="doc xls" aria-hidden="true">XLS</span><span><b>Your own Excel format</b><span>the same layout you use today</span></span></li>
+        <li><span class="doc ics" aria-hidden="true">ICS</span><span><b>Calendar for phones</b><span>classes appear in each teacher's calendar</span></span></li>
+        <li><span class="doc web" aria-hidden="true">LINK</span><span><b>Private phone links</b><span>no app, no sign-in, English / हिंदी / मराठी</span></span></li>
+      </ul>
+    </div>
+  </section>
+
   <section id="how">
     <div class="wrap">
       <div class="reveal">
@@ -475,6 +588,53 @@
         <a class="btn ghost" href="samples/sample-timetable.pdf"><svg aria-hidden="true"><use href="#i-down"/></svg>Sample PDF (6 pages)</a>
         <a class="btn ghost" href="samples/sample-timetable.xlsx"><svg aria-hidden="true"><use href="#i-down"/></svg>Sample Excel</a>
       </p>
+    </div>
+  </section>
+
+  <section id="semester">
+    <div class="wrap handled">
+      <div class="reveal">
+        <span class="eyebrow">During the semester</span>
+        <h2>Your semester, handled</h2>
+        <p class="sub">A timetable changes every week. Tell us what happened and the right people know within minutes, without
+          redoing the whole timetable.</p>
+        <ul class="ticklist">
+          <li><span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.5-3.5 3.2-5.5 6.5-5.5s6 2 6.5 5.5"/><path d="M17 8v6M14 11h6"/></svg></span>
+            <span><b>Teacher on leave</b><span>A free substitute who knows the subject, with no new clash. Both teachers are told.</span></span></li>
+          <li><span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4M12 13v5M9.5 15.5h5"/></svg></span>
+            <span><b>Lectures lost to a holiday or closure</b><span>Make-up slots that fit everyone's week, booked in one go.</span></span></li>
+          <li><span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 0 1 14-5.3L20 9"/><path d="M20 4v5h-5"/><path d="M20 12a8 8 0 0 1-14 5.3L4 15"/><path d="M4 20v-5h5"/></svg></span>
+            <span><b>Room closed or a new batch</b><span>Re-planned so that only the affected classes move.</span></span></li>
+          <li><span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg></span>
+            <span><b>Hours for NAAC / NBA</b><span>Planned vs delivered hours per subject and teacher, with early warnings.</span></span></li>
+          <li><span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 2.5h6v3H9zM9 11h6M9 15h4"/></svg></span>
+            <span><b>Exams at the end</b><span>No student with two exams at once, rooms seated and invigilators shared fairly.</span></span></li>
+        </ul>
+      </div>
+      <figure class="phone-wrap reveal">
+        <div class="phone" role="img" aria-label="A teacher's phone: Prof. Rao is on leave, so the 11:00 DBMS Lab for batch A1 in Lab 2 now shows as a class Prof. Shah covers, with a notice explaining the change.">
+          <div class="ph-top" aria-hidden="true"><span>9:41</span><span>●●● ▮</span></div>
+          <div class="toast" aria-hidden="true">
+            <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg></span>
+            <span><b>Timetable change today</b>Prof. Rao is on leave. You cover DBMS Lab (A1) at 11:00 in Lab 2.</span>
+          </div>
+          <div aria-hidden="true">
+            <p class="ph-title">Prof. Shah</p>
+            <p class="ph-sub">Wednesday · my classes</p>
+            <div class="ph-list">
+              <div class="ph-c k1"><time>09:00</time><span><b>DBMS</b><small>SE-A · Room 204</small></span></div>
+              <div class="ph-c k6"><time>10:00</time><span><b>OS</b><small>SE-B · Room 105</small></span></div>
+              <div class="ph-slot">
+                <div class="ph-c free gone"><time>11:00</time><span>Free period</span></div>
+                <div class="ph-c cover"><time>11:00</time><span><b>DBMS Lab<em class="tag">COVER</em></b><small>A1 · Lab 2 · for Prof. Rao</small></span></div>
+              </div>
+              <div class="ph-c free"><time>12:00</time><span>Lunch</span></div>
+              <div class="ph-c k3"><time>13:00</time><span><b>DBMS</b><small>SE-B · Room 204</small></span></div>
+            </div>
+          </div>
+        </div>
+        <figcaption>What a teacher sees on their private link: changes arrive the same day.</figcaption>
+      </figure>
     </div>
   </section>
 
@@ -613,7 +773,7 @@
         <details><summary>What happens to our data?</summary>
           <p>Your data is used only to make your college's timetable. It is kept on our own computer, not uploaded to any cloud service, kept separate from other colleges' data, and never sold. You get all of it back in Excel at any time, and we delete it when you ask. We follow India's Digital Personal Data Protection Act.</p></details>
         <details><summary>Do we need to install anything or create accounts?</summary>
-          <p>No. You send us Excel files by email or WhatsApp and receive PDFs and Excel files back. Faculty get their own timetable as a PDF and a calendar file for their phone.</p></details>
+          <p>No. You send us Excel files by email or WhatsApp and receive PDFs and Excel files back. Faculty get their own timetable as a PDF, a calendar file and a private link that opens on any phone, without an app or a sign-in.</p></details>
         <details><summary>How quickly do we get the timetable?</summary>
           <p>Usually within a few working days of receiving complete data, including a round of your corrections. Changes during the semester are usually turned around the same or next working day.</p></details>
         <details><summary>Our timetable has unusual rules. Will it fit?</summary>
@@ -650,7 +810,7 @@
     var hdr = document.getElementById('hdr');
     var onScroll = function () { hdr.classList.toggle('scrolled', window.scrollY > 8); };
     window.addEventListener('scroll', onScroll, { passive: true }); onScroll();
-    var els = document.querySelectorAll('.reveal, .stagger, .mock');
+    var els = document.querySelectorAll('.reveal, .stagger, .mock, .phone');
     if (!('IntersectionObserver' in window)) { els.forEach(function (e) { e.classList.add('in'); }); return; }
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); } });
