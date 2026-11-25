@@ -69,6 +69,23 @@
   .btn:active { transform: translateY(0); }
   .btn svg { width: 18px; height: 18px; flex: none; }
   nav .btn { padding: 8px 16px; margin-left: 20px; }
+  nav .btn.ghost { margin-left: 16px; padding: 7px 14px; box-shadow: none; }
+  nav .btn { white-space: nowrap; }
+  @media (max-width: 380px) { nav .btn:not(.ghost) { display: none; } }
+  @media (max-width: 420px) { nav .btn.ghost { margin-left: 0; padding: 7px 10px; } nav .btn:not(.ghost) { margin-left: 8px; padding: 8px 12px; } .brand { font-size: 16px; } }
+  /* Two ways to work with us */
+  .ways { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 8px; }
+  @media (max-width: 760px) { .ways { grid-template-columns: 1fr; } }
+  .way { background: var(--panel); border: 1px solid var(--line); border-radius: 18px; padding: 24px; box-shadow: var(--shadow); position: relative;
+    display: flex; flex-direction: column; gap: 10px; transition: transform .25s, box-shadow .25s; }
+  .way:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+  .way .tag { align-self: flex-start; font-size: 12px; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; padding: 3px 10px;
+    border-radius: 999px; background: var(--accent-soft); color: var(--accent); }
+  .way h3 { font-size: 20px; margin: 0; }
+  .way ol { margin: 0; padding-left: 20px; color: var(--muted); }
+  .way ol li { margin-bottom: 4px; }
+  .way .actions { margin-top: auto; padding-top: 6px; }
+  .way .note { margin: 0; }
   .btn.ghost { background: var(--panel); color: var(--fg); border-color: var(--line); box-shadow: var(--shadow); }
   .btn.wa { background: var(--wa); color: #ffffff; box-shadow: 0 6px 18px rgb(21 128 61 / .3); }
   @media (prefers-color-scheme: dark) { .btn.wa { color: #052e16; } }
@@ -416,6 +433,7 @@
       <a href="#results">Results</a>
       <a href="#about">About us</a>
       <a href="#faq">FAQ</a>
+      <a class="btn ghost" href="https://app.rigconsultancy.com/sign-in">Sign in</a>
       <a class="btn" href="#pilot">Join the pilot</a>
     </nav>
   </div>
@@ -706,6 +724,39 @@
     </div>
   </section>
 
+  <section id="ways" class="alt">
+    <div class="wrap">
+      <div class="reveal center">
+        <span class="eyebrow">Two ways to work with us</span>
+        <h2>We do it for you, or you do it yourself</h2>
+        <p class="sub">Every pilot college can use both. Most start with us doing the first timetable, then the coordinator takes over online.</p>
+      </div>
+      <div class="ways stagger">
+        <div class="way">
+          <span class="tag">Done for you</span>
+          <h3>Send us your Excel</h3>
+          <ol>
+            <li>Email or WhatsApp us your timetable workbook.</li>
+            <li>We generate, check and adjust it with you.</li>
+            <li>You get every printout, Excel file and phone link.</li>
+          </ol>
+          <p class="actions"><a class="btn wa" href="https://wa.me/918766685471?text=Hello%2C%20we%20would%20like%20to%20know%20more%20about%20the%20free%20timetable%20pilot."><svg aria-hidden="true"><use href="#i-chat"/></svg>WhatsApp us</a></p>
+        </div>
+        <div class="way">
+          <span class="tag">Do it yourself online</span>
+          <h3>Sign in at app.rigconsultancy.com</h3>
+          <ol>
+            <li>Download the Excel template (it has a "How to fill" tab), or upload your own timetable workbook.</li>
+            <li>Press Generate: a clash-free timetable in minutes.</li>
+            <li>Adjust, publish and share links with faculty and students.</li>
+          </ol>
+          <p class="actions"><a class="btn" href="https://app.rigconsultancy.com/sign-in">Sign in</a></p>
+          <p class="note">By invitation: pilot colleges get a sign-in from us. Up to 5 coordinators per college; faculty and students need no account.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section id="pilot">
     <div class="wrap">
       <div class="pilot-box reveal">
@@ -773,7 +824,7 @@
         <details><summary>What happens to our data?</summary>
           <p>Your data is used only to make your college's timetable. It is kept on our own computer, not uploaded to any cloud service, kept separate from other colleges' data, and never sold. You get all of it back in Excel at any time, and we delete it when you ask. We follow India's Digital Personal Data Protection Act.</p></details>
         <details><summary>Do we need to install anything or create accounts?</summary>
-          <p>No. You send us Excel files by email or WhatsApp and receive PDFs and Excel files back. Faculty get their own timetable as a PDF, a calendar file and a private link that opens on any phone, without an app or a sign-in.</p></details>
+          <p>Nothing to install. Either send us your Excel files by email or WhatsApp, or let your coordinator sign in at <a href="https://app.rigconsultancy.com/sign-in">app.rigconsultancy.com</a> (we send the invitation) and do it online. Faculty and students never need an account: they get a PDF, a calendar file and a private link that opens on any phone.</p></details>
         <details><summary>How quickly do we get the timetable?</summary>
           <p>Usually within a few working days of receiving complete data, including a round of your corrections. Changes during the semester are usually turned around the same or next working day.</p></details>
         <details><summary>Our timetable has unusual rules. Will it fit?</summary>
@@ -799,7 +850,7 @@
 <footer>
   <div class="wrap">
     <span>© 2026 RIG Consultancy · Clash-free timetables for colleges and universities</span>
-    <a href="mailto:info.rigconsultancy@gmail.com">info.rigconsultancy@gmail.com</a>
+    <span><a href="https://app.rigconsultancy.com/sign-in">Sign in</a> · <a href="mailto:info.rigconsultancy@gmail.com">info.rigconsultancy@gmail.com</a></span>
   </div>
 </footer>
 
